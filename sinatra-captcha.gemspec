@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.name = 'sinatra-recaptcha'
   s.version = '0.0.1'
   s.date = '2009-07-09'
-
+  
   s.description = "Simple, easy way to implement recaptcha for Sinatra"
   s.summary = "Simple, easy way to implement recaptcha for Sinatra"
 
