@@ -2,26 +2,23 @@ Gem::Specification.new do |s|
   s.specification_version = 2 if s.respond_to? :specification_version=
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
 
-  s.name = 'sinatra-captcha'
-  s.version = '0.1.0.0'
-  s.date = '2009-04-29'
+  s.name = 'sinatra-recaptcha'
+  s.version = '0.0.1'
+  s.date = '2009-07-09'
 
-  s.description = "Simple, easy captcha for Sinatra"
-  s.summary = "Simple, easy captcha for Sinatra"
+  s.description = "Simple, easy way to implement recaptcha for Sinatra"
+  s.summary = "Simple, easy way to implement recaptcha for Sinatra"
 
-  s.authors = ["Blake Mizerany"]
-  s.email = "sinatrarb@googlegroups.com"
+  s.authors = ["Blake Mizerany", "James Pozdena"]
 
   # = MANIFEST =
   s.files = %w[
     README.markdown
-    lib/sinatra/captcha.rb
+    lib/sinatra/recaptcha.rb
   ]
   # = MANIFEST =
 
   s.has_rdoc = false
-  s.homepage = "http://www.sinatrarb.com"
   s.require_paths = %w[lib]
-  s.rubyforge_project = 'sinatra-captcha'
-  s.rubygems_version = '1.1.1'
+  s.rubygems_version = %q{1.3.1}
 end

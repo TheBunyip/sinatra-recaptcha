@@ -1,19 +1,28 @@
-# Quick, simple, easy captcha for Sinatra apps
+# Quick, simple, easy way to implement REcaptcha for Sinatra apps
 
 ## Installation
-    gem install sinatra-captcha
+  
+  gem sources -a http://gems.github.com
+  sudo gem install jpoz-sinatra-captcha
 
 <pre><code>
 require 'rubygems'
 require 'sinatra'
-require 'sinatra/captcha'
+require 'sinatra/recaptcha'
+
+configure do
+   # https://admin.recaptcha.net/accounts/signup/
+   Sinatra::ReCaptcha.public_key  = 'your_public_key'
+   Sinatra::ReCaptcha.private_key = 'your_private_key'
+end
+
 
 get '/' do
-  erb :captcha
+  haml :recaptcha
 end
 
 post '/' do
-  halt(401, "invalid captcha") unless captcha_pass?
+  halt(401, "invalid captcha") unless captcha_correct?
   "passed!"
 end
 
@@ -21,13 +30,7 @@ __END__
 
 @@ captcha
 
-<h1>Catcha Example</h1>
-<form method="post" action="/">
-  <p><%= captcha_image_tag %></p>
-  <p><%= captcha_answer_tag %></div>
-  <div><input type="submit" value="Submit" /></div>
-</form>
-</code></pre>
-
-Thank you to ERR THE BLOG for inspiration:
-http://errtheblog.com/posts/43-captchator-on-rails
+%h1 Try ReCaptch
+%form{:method=>"post", :action=>"/post"}
+  = recaptcha
+  %input{:type=>'submit', :value => 'Send'}
