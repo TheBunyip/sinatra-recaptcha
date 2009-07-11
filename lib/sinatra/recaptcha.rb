@@ -11,20 +11,10 @@ module Sinatra
       attr_accessor :public_key, :private_key, :server
       attr_reader   :verify
     end
-
-    def captcha_pass?
-      session = params[:captcha_session].to_i
-      answer  = params[:captcha_answer].gsub(/\W/, '')
-      open("http://captchator.com/captcha/check_answer/#{session}/#{answer}").read.to_i.nonzero? rescue false
-    end
     
-    def recaptcha
-      "<div id='dynamic_recaptcha'>
-        <script type='text/javascript' src='#{Sinatra::ReCaptcha.server}/js/recaptcha_ajax.js'></script>
-        <script type='text/javascript' >
-          Recaptcha.create('#{Sinatra::ReCaptcha.public_key}', document.getElementById('dynamic_recaptcha') );
-        </script>
-      </div>"
+    def recaptcha(type = :iframe)
+      raise "Recaptcha type: #{type} is not known, please use (:iframe or :ajax)" unless [:iframe, :ajax].include?(type.to_sym)
+      self.send("recaptcha_#{type}")
     end
 
     def recaptcha_correct?
@@ -41,6 +31,31 @@ module Sinatra
         return true
       end
     end
+    
+    protected
+    
+    def recaptcha_iframe
+      "<script type='text/javascript'
+         src='#{Sinatra::ReCaptcha.server}/challenge?k=#{Sinatra::ReCaptcha.public_key}'>
+      </script>
+      <noscript>
+         <iframe src='#{Sinatra::ReCaptcha.server}/noscript?k=#{Sinatra::ReCaptcha.public_key}'
+             height='300' width='500' frameborder='0'></iframe><br>
+         <textarea name='recaptcha_challenge_field' rows='3' cols='40'>
+         </textarea>
+         <input type='hidden' name='recaptcha_response_field' 
+             value='manual_challenge'>
+      </noscript>"
+    end
+    
+    def recaptcha_ajax
+      "<div id='recaptcha_div'> </div>
+        <script type='text/javascript' src='#{Sinatra::ReCaptcha.server}/js/recaptcha_ajax.js'></script>
+        <script type='text/javascript' >
+          Recaptcha.create('#{Sinatra::ReCaptcha.public_key}', 'recaptcha_div' );
+        </script>"
+    end
+    
   end
 
   helpers ReCaptcha
